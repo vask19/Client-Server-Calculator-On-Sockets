@@ -7,6 +7,12 @@ public class Phone implements AutoCloseable {
     private BufferedReader reader;
     private BufferedWriter writer;
 
+    public Phone(Phone serverPhone){
+        this.server = serverPhone.server;
+        accept();
+
+    }
+
     public Phone(String port) {
         try {
              server = new ServerSocket(Integer.parseInt(port));
@@ -42,7 +48,7 @@ public class Phone implements AutoCloseable {
 
     }
 
-    public void accept() {
+    private void accept() {
         try {
             clientSocket = server.accept();
             createStreams();
@@ -86,5 +92,6 @@ public class Phone implements AutoCloseable {
         }
 
     }
+
 
 }
