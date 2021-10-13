@@ -1,3 +1,5 @@
+import socket.Phone;
+
 public class Calculator {
 
 
@@ -6,22 +8,24 @@ public class Calculator {
 
        Phone phoneServer = new Phone(port);
        while (true) {
-           try (Phone phone = new Phone(phoneServer);) {
-               System.out.println("Client accepted");
-               new Thread(() -> {
-                   System.out.println("Waiting for client...");
-                   String a = phone.readLine();
-                   String b = phone.readLine();
-                   int result = calculate(a, b, operation);
-                   String message = a + " " + operation + b + " = " + result;
-                   phone.writeLine(message);
-                   System.out.println("Accepted: " + message);
+           System.out.println("Waiting for client...");
+           Phone phone = new Phone(phoneServer);
+           new Thread(() -> {
+               String a = phone.readLine();
+               String b = phone.readLine();
+               int result = calculate(a, b, operation);
+               String message = a + " " + operation + b + " = " + result;
+               phone.writeLine(message);
+               System.out.println("Accepted: " + message);
+               try {
+                   phone.close();
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
 
-               }).start();
 
-           } catch (Exception e) {
-               e.printStackTrace();
-           }
+           }).start();
+
 
        }
 
